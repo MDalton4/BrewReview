@@ -1,0 +1,9 @@
+{
+    "require": {
+        "web-token/jwt-framework": "^1.2",
+		"propel/propel": "~2.0@dev"
+    },
+	"autoload": {
+		"classmap": ["database/generated-classes/"]
+	}
+}

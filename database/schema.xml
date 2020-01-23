@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="socialmedia" defaultIdMethod="native">
+  <table name="user" phpName="User">
+	<column name="username" type="varchar" size="24" required="true" primaryKey="true" />
+	<column name="password" type="varchar" size="255" required="true" />
+	<column name="real_name" type="varchar" size="100" required="true" />
+	<column name="permissions" type="tinyint" required="true" />
+	<column name="picture" type="blob" />
+	<column name="creationTime" type="timestamp" required="true" />
+	<column name="lastActivityTime" type="timestamp" required="true" />
+  </table>
+  <table name="company" phpName="Company">
+	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+	<column name="name" type="varchar" size="100" required="true" />
+	<column name="picture" type="blob" />
+	<column name="location" type="varchar" size="200" />
+	<column name="description" type="longvarchar" />
+  </table>
+  <table name="style" phpName="Style">
+	<column name="style" type="varchar" size="100" required="true" primaryKey="true" />
+	<column name="description" type="longvarchar" required="true" />
+  </table>
+  <table name="drink" phpName="Drink">
+	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+	<column name="name" type="varchar" size="100" required="true" />
+	<column name="picture" type="blob" />
+	<column name="company_id" type="integer" required="true" />
+	<column name="style_name" type="varchar" required="true" />
+	<foreign-key foreignTable="company" onDelete="CASCADE">
+		<reference local="company_id" foreign="id" />
+	</foreign-key>
+	<foreign-key foreignTable="style" onDelete="CASCADE">
+		<reference local="style_name" foreign="style" />
+	</foreign-key>
+  </table>
+  <table name="post" phpName="Post">
+	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+	<column name="username" type="varchar" size="24" required="true" />
+	<foreign-key foreignTable="user" onDelete="CASCADE">
+		<reference local="username" foreign="username" />
+	</foreign-key>
+	<column name="body" type="longvarchar" required="true" />
+	<column name="creationTime" type="timestamp" required="true" />
+  </table>
+  <table name="review" phpName="Review">
+	<column name="rating" type="decimal" required="true" />
+	<column name="drink_id" type="integer" required="true" />
+	<column name="post_id" type="integer" required="true" primaryKey="true" />
+	<foreign-key foreignTable="post" onDelete="CASCADE">
+		<reference local="post_id" foreign="id" />
+	</foreign-key>
+	<foreign-key foreignTable="drink" onDelete="CASCADE">
+		<reference local="drink_id" foreign="id" />
+	</foreign-key>
+  </table>
+  <table name="friend" phpName="Friend">
+	<column name="username" type="varchar" size="24" required="true" />
+	<column name="friend_username" type="varchar" size="24" required="true" />
+	<foreign-key foreignTable="user" onDelete="CASCADE">
+		<reference local="username" foreign="username" />
+	</foreign-key>
+	<foreign-key foreignTable="user" phpName="Friend_User" onDelete="CASCADE">
+		<reference local="friend_username" foreign="username" />
+	</foreign-key>
+	<unique name="user_friend">
+		<unique-column name="username" />
+		<unique-column name="friend_username" />
+	</unique>
+  </table>
+  <table name="wishlist" phpName="Wishlist">
+	<column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+	<column name="username" type="varchar" size="24" required="true" />
+	<column name="drink_id" type="integer" required="true" />
+	<foreign-key foreignTable="user" onDelete="CASCADE">
+		<reference local="username" foreign="username" />
+	</foreign-key>
+	<foreign-key foreignTable="drink" onDelete="CASCADE">
+		<reference local="drink_id" foreign="id" />
+	</foreign-key>
+	<unique name="user_drink">
+		<unique-column name="username" />
+		<unique-column name="drink_id" />
+	</unique>
+  </table>
+</database>
